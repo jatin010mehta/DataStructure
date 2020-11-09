@@ -1,5 +1,8 @@
 package DS;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LeetCode {
     int totalPath = 0;
     public int uniquePathsIII(int[][] grid) {
@@ -62,5 +65,60 @@ public class LeetCode {
         dp[i][j] =1+ Math.max(Math.max(path1,path2),Math.max(path3,path4));
         return dp[i][j];
 
+    }
+
+    public List<List<Integer>> pacificAtlantic(int[][] matrix) {
+        List<List<Integer>> cord = new ArrayList();
+        if(matrix.length==0)return cord;
+
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        int[][] paci = new int[row][col];
+        int[][] alt =  new int[row][col];
+
+
+        //first row (pacific)
+        for(int i=0;i<col;i++){
+            dfs(matrix,0,i,paci,Integer.MIN_VALUE);
+        }
+        //first col (pacific)
+        for(int i=0;i<row;i++){
+            dfs(matrix,i,0,paci,Integer.MIN_VALUE);
+        }
+        //last row (altantic)
+        for(int i=0;i<col;i++){
+            dfs(matrix,row-1,i,alt,Integer.MIN_VALUE);
+        }
+        //last col (altantic)
+        for(int i=0;i<row;i++){
+            dfs(matrix,i,col-1,alt,Integer.MIN_VALUE);
+        }
+
+        for(int i=0;i<paci.length;i++){
+            for(int j=0;j<paci[0].length;j++){
+                if(paci[i][j]==1  && alt[i][j]==1){
+                    List<Integer> c = new ArrayList();
+                    c.add(i);c.add(j);
+                    cord.add(c);
+                }
+            }
+        }
+
+        return cord;
+    }
+
+    void dfs(int[][] matrix , int row , int col , int[][] temp,int pre){
+
+        if(row<0 || col<0 || row>matrix.length-1 || col>matrix[0].length-1)return;
+        else if(pre>matrix[row][col])return;
+        else if(temp[row][col]==1)return;
+
+        temp[row][col] = 1;
+
+        dfs(matrix,row+1,col,temp,matrix[row][col]);
+        dfs(matrix,row-1,col,temp,matrix[row][col]);
+        dfs(matrix,row,col-1,temp,matrix[row][col]);
+        dfs(matrix,row,col+1,temp,matrix[row][col]);
     }
 }
