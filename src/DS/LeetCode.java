@@ -1,9 +1,11 @@
 package DS;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class LeetCode {
+
     int totalPath = 0;
     public int uniquePathsIII(int[][] grid) {
         int totalZero = 0;
@@ -120,5 +122,32 @@ public class LeetCode {
         dfs(matrix,row-1,col,temp,matrix[row][col]);
         dfs(matrix,row,col-1,temp,matrix[row][col]);
         dfs(matrix,row,col+1,temp,matrix[row][col]);
+    }
+    public boolean hasAllCodes(String s, int k) {
+        int count = 0;
+        int start = 0;
+        HashSet<String> set = new HashSet<>();
+        for (int i = 0; i < s.length(); i++) {
+            count++;
+            if (count==k){
+                set.add(s.substring(start,start+k));
+                start++;
+                count--;
+            }
+        }
+        return set.size()==Math.pow(2,k);
+    }
+    public int singleNumber(int[] nums) {
+        HashSet<Integer> set = new HashSet();
+        for(int n:nums){
+            if(set.contains(n)){
+                set.remove(n);
+            }
+            else
+                set.add(n);
+        }
+        for(int n:set)
+            return n;
+        return -1;
     }
 }
