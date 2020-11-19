@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         LeetCode lc = new LeetCode();
-        lc.singleNumber(new int[]{2,1,2});
+        System.out.println(100/60);
 
 
     }

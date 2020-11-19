@@ -63,4 +63,19 @@ public class Amazon {
         }
         return map.get(maxVal);
     }
+
+    public static int winner(String[][] codes, String[] shoppingCart){
+        StringBuilder regex = new StringBuilder(".*");
+        for(String[] code:codes){
+            for(String str:code){
+                regex.append(str.equals("anything")?".+":str);
+            }
+        }
+
+        StringBuilder pattern = new StringBuilder();
+        for(String str:shoppingCart){
+            pattern.append(str);
+        }
+        return pattern.toString().matches(regex.toString())?1:0;
+    }
 }

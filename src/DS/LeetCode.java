@@ -1,10 +1,15 @@
 package DS;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class LeetCode {
+    public class ListNode {
+      int val;
+      ListNode next;
+      ListNode() {}
+      ListNode(int val) { this.val = val; }
+      ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+  }
 
     int totalPath = 0;
     public int uniquePathsIII(int[][] grid) {
@@ -149,5 +154,112 @@ public class LeetCode {
         for(int n:set)
             return n;
         return -1;
+    }
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i],i);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            int compliment = target-nums[i];
+            if (map.containsKey(compliment)&&map.get(compliment)!=i){
+                return new int[]{i,map.get(compliment)};
+            }
+        }
+        return new int[]{-1,-1};
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(0);
+        ListNode temp = head;
+        ListNode p = l1;
+        ListNode q = l2;
+        int carry = 0;
+        while (p!=null||q!=null){
+            int x = (p!=null)?p.val:0;
+            int y = (q!=null)?q.val:0;
+            int sum = x+y+carry;
+            carry = sum/10;
+            temp.next = new ListNode(sum%10);
+            temp=temp.next;
+            if(p!=null)
+                p=p.next;
+            if (q!=null)
+                q=q.next;
+        }
+        if (carry>0)
+            temp.next=new ListNode(carry);
+        return head.next;
+    }
+    public ListNode mergeKLists(ListNode[] lists) {
+        ListNode head = new ListNode(0);
+        ListNode temp = head;
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for(ListNode li:lists){
+            while (li!=null){
+                queue.add(li.val);
+                li=li.next;
+            }
+        }
+        while (!queue.isEmpty()){
+            temp.next=new ListNode(queue.poll());
+            temp=temp.next;
+        }
+        return head.next;
+    }
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(0);
+        ListNode temp = head;
+        while (l1!=null&&l2!=null){
+            if (l1.val< l2.val){
+                temp.next = new ListNode(l1.val);
+                l1=l1.next;
+            }else {
+                temp.next=new ListNode(l2.val);
+                l2=l2.next;
+            }
+            temp=temp.next;
+        }
+        if (l1!=null)
+            temp.next=l1;
+        if (l2!=null)
+            temp.next=l2;
+        return head.next;
+    }
+
+//
+//               [1],
+//             [1,1],
+//             [1,2,1], [1,1,1]
+//             [1,3,3,1],
+//             [1,4,6,4,1]
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> output = new ArrayList<>();
+        List<Integer> row = new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            row.add(0,1);
+            for (int j = 1; j <row.size()-1 ; j++) {
+                row.set(j,row.get(j)+row.get(j+1));
+            }
+            output.add(new ArrayList<>(row));
+        }
+        return output;
+    }
+
+    public int[] twoSumII(int[] numbers, int target) {
+        int aPointer = 0;
+        int bPointer = numbers.length-1;
+        while (aPointer<bPointer){
+            int sum = numbers[aPointer]+numbers[bPointer];
+            if (sum<target)
+                aPointer++;
+            else if (sum>target)
+                bPointer--;
+            else if (sum==target)
+                return new int[]{aPointer+1,bPointer+1};
+        }
+        return new int[]{-1,-1};
     }
 }
