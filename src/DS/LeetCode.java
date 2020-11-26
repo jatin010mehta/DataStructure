@@ -262,4 +262,112 @@ public class LeetCode {
         }
         return new int[]{-1,-1};
     }
+    ListNode firstNode;
+    public boolean isPalindrome(ListNode head) {
+        firstNode = head;
+        return checkPalindrome(head);
+    }
+
+    private boolean checkPalindrome(ListNode current) {
+        if (current!=null){
+            if (!checkPalindrome(current.next)) return false;
+            if (firstNode.val!=current.val) return false;
+            firstNode=firstNode.next;
+        }
+        return true;
+    }
+    public String removeDuplicates(String S) {
+        Stack<Character> stack = new Stack<>();
+        for (char ch :S.toCharArray()) {
+            if (stack.isEmpty()||stack.peek()!=ch)
+                stack.push(ch);
+            else
+                stack.pop();
+
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty())
+            sb.append(stack.pop());
+        return sb.reverse().toString();
+    }
+   //yffbbbbnnnnffbgffffgbbbbgssssgthyyyy
+   //111234
+   //012345
+    public String removeDuplicates(String s, int k) {
+        StringBuilder sb = new StringBuilder(s);
+        int[] count = new int[sb.length()];
+        int i = 0;
+        while (i<sb.length()){
+            if (i==0||sb.charAt(i)!=sb.charAt(i-1))
+                count[i]=1;
+            else {
+                count[i]=count[i-1]+1;
+                if (count[i]==k){
+                    sb.delete(i-k+1,i+1);
+                    i=i-k;
+                }
+            }
+            i++;
+        }
+       return sb.toString();
+    }
+
+    //"lee(t(c)o)de)"
+    //"a)b(c)d"
+    public String minRemoveToMakeValid(String s) {
+        Stack<Integer> index = new Stack<>();
+        Stack<Character> charecter = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            if (s.charAt(i)=='('){
+                index.push(i);
+                charecter.push('(');
+            }else if (s.charAt(i)==')'){
+                if (!charecter.isEmpty()&&charecter.peek()=='('){
+                    index.pop();
+                    charecter.pop();
+                }
+                else {
+                    index.push(i);
+
+                }
+            }
+        }
+      HashSet<Integer> set = new HashSet<>();
+        while (!index.isEmpty()){
+            set.add(index.pop());
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (set.contains(i))
+                set.remove(i);
+            else
+                sb.append(s.charAt(i));
+        }
+        return sb.toString();
+    }
+
+    public int minInsertions(String s) {
+        int[][] dp = new int[s.length()][s.length()];
+        for (int i = 0; i < dp.length; i++) {
+            for (int j = 0; j < dp.length; j++) {
+                dp[i][j]=-1;
+            }
+        }
+        return minInsertion(s,0,s.length()-1,dp);
+    }
+
+    private int minInsertion(String s, int i, int j, int[][] dp) {
+        if (i>=j) return 0;
+        if (dp[i][j]!=-1)
+            return dp[i][j];
+        if (s.charAt(i)==s.charAt(j)){
+            dp[i][j]=minInsertion(s,i+1,j-1,dp);
+            return dp[i][j];
+        }else {
+            int dec1 = 1+minInsertion(s,i+1,j,dp);
+            int dec2 = 1+minInsertion(s,i,j-1,dp);
+            dp[i][j] = Math.min(dec1,dec2);
+            return dp[i][j];
+        }
+    }
 }
